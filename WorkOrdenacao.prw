@@ -22,7 +22,7 @@ Function U_WORK_ORDENACAO_E_BUSCAS
     /*Seleciona a área SA1 já apontada para o índice 1*/
     SA1 ->(dbSetOrder(1),dbSeek('  000004'),A1_NOME)
 
-    /*Seleciona a área SA1 já apontada para o índice*/
+    /*Seleciona a área SA1 já apontada para o índice preenchendo a variável*/
     cNome := SA1 ->(dbSetOrder(retOrder("SA1","A1_FILIAL+A1_CODIGO")),dbSeek('  000004'),A1_NOME)
 
     /*DEPRECATED*/
