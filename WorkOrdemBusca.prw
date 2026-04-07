@@ -15,6 +15,11 @@ Function U_WORK_ORDEM_BUSCAS
     dbSkip(5) //Pula 5 registros
     dbSkip(-1) //Registro anterior
 
+    dbGoTo(9) //Vai para o registro 9 referenciado pelo RECNO
+
+    dbGoTop() //Vai para o primeiro registro
+    dbGoBottom() //Vai para o último registro
+
     cNome := SA2->A2_NOME
 
     SA1->(dbSetOrder(2),dbSeek(SA2->(A2_FILIAL+A2_NOME)))
