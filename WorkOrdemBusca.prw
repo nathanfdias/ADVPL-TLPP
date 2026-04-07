@@ -10,6 +10,11 @@ Function U_WORK_ORDEM_BUSCAS
     cChaveBusca := '  000005'
     dbSeek(cChaveBusca) //Busca exata
     dbSeek(cChaveBusca,.T.) //Busca aproximada
+
+    dbSkip() //Próximo registro
+    dbSkip(5) //Pula 5 registros
+    dbSkip(-1) //Registro anterior
+
     cNome := SA2->A2_NOME
 
     SA1->(dbSetOrder(2),dbSeek(SA2->(A2_FILIAL+A2_NOME)))
