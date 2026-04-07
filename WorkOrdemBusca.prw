@@ -9,7 +9,7 @@ Function U_WORK_ORDEM_BUSCAS
     cChaveIndice := indexKey(retOrder("SA2","A2_FILIAL+A2_COD"))
     cChaveBusca := '  000005'
     dbSeek(cChaveBusca) //Busca exata
-    dbSeek(cChaveBusca+.T.) //Busca aproximada
+    dbSeek(cChaveBusca,.T.) //Busca aproximada
     cNome := SA2->A2_NOME
 
     SA1->(dbSetOrder(2),dbSeek(SA2->(A2_FILIAL+A2_NOME)))
