@@ -53,7 +53,9 @@ Function U_WORK_ORDEM_PONTEIROS
 
     //-- dbCloseArea() --> Fecha a área de trabalho, liberando os recursos alocados para ela
     SA2->(dbCloseArea())
-    
+    //ou
+    dbCloseArea()
+
     rpcClearEnv()
 
 Return
