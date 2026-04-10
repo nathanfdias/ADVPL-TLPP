@@ -1,6 +1,6 @@
 #include 'totvs.ch'
 
-Function U_WORK_ORDENACAO_E_BUSCAS
+Function U_WORK_ORDENACAO_E_BUSCAS()
     /*DEPRECATED*/
     rpcSetEnv('01','01')
 

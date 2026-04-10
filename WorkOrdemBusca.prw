@@ -1,6 +1,6 @@
 #include 'totvs.ch'
 
-Function U_WORK_ORDEM_BUSCAS
+Function U_WORK_ORDEM_BUSCAS()
 
     rpcSetEnv('01','01')
 

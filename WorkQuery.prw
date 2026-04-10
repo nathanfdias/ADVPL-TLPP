@@ -1,6 +1,6 @@
 #include 'totvs.ch'
 
-Function U_WORK_QUERY_SQL
+Function U_WORK_QUERY_SQL()
 
     Local cSQL := ''
     Local aDados := array(0)

@@ -12,7 +12,7 @@
 (examples)
 @see (links_or_references)
 /*/
-User Function ArquivoTemp
+User Function ArquivoTemp()
 
     rpcSetEnv('01','01')
     

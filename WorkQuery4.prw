@@ -13,7 +13,7 @@
 (examples)
 @see (links_or_references)
 /*/
-User Function nomeFunction
+User Function nomeFunction()
 
     cSQL := "UPDATE " + retSqlName("SA1")
     cSQL += CRLF + "SET D_E_L_E_T_ = ' '"

@@ -1,6 +1,6 @@
 #include 'totvs.ch'
 
-Function U_WORK_ORDEM_PONTEIROS
+Function U_WORK_ORDEM_PONTEIROS()
 
     Local nQuantidadeDeRegistros as numeric
     Local cListaDeFornecedores as character

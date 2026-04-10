@@ -12,7 +12,7 @@
 (examples)
 @see (links_or_references)
 /*/
-User Function ArquivoTemp2
+User Function ArquivoTemp2()
     
     Local oTempTable as object
     Local cAliasTemp as character
