@@ -1,0 +1,71 @@
+#include 'totvs.ch'
+
+/*/{Protheus.doc} U_CRIAR_ARQUIVO_TEXTO_1
+    @type  Function
+    @author user
+    @since 13/04/2026
+    @version version
+    @param param_name, param_type, param_descr
+    @return return_var, return_type, return_description
+    @example
+    (examples)
+    @see (links_or_references)
+    /*/
+Function U_CRIAR_ARQUIVO_TEXTO_1
+    
+    Local cSaveFile as character
+    Local cBuffer   as character
+    Local nBuffer   as numeric
+    Local nHandle   as numeric
+    Local nWrite    as numeric
+
+    cSaveFile := 'C:\Temp\ArquivoTexto.txt'
+
+    if File(cSaveFile)
+        fErase(cSaveFile)
+    endif
+
+    nHandle := fCreate(cSaveFile)
+
+    if nHandle < 0
+        fwAlertError('Código de erro: ' + Str(fError(),4),'ERRO')
+        return .F.
+    endif 
+
+    cBuffer := padr("ENTIDADE",10) + " - " + padr("CODIGO",10) + " - " + padr("LOJA",5) +;
+        padr("NOME",5) + " - " + padr("DT_NASCIMENTO",20)
+    nBuffer := len(cBuffer)
+
+    nWrite := fWrite(nHandle, cBuffer)
+
+    IF nWrite <> nBuffer
+        fwAlertError('Erro na gravação do arquivo. Código de erro: ' + Str(fError(),4),'ERRO')
+        fClose(nHandle)
+        return .F.
+    ENDIF
+
+    cBuffer := CRLF + strtran(space(70), ' ', '-')
+
+        nBuffer := len(cBuffer)
+
+    nWrite := fWrite(nHandle, cBuffer)
+
+    IF nWrite <> nBuffer
+        fwAlertError('Erro na gravação do arquivo. Código de erro: ' + Str(fError(),4),'ERRO')
+        fClose(nHandle)
+        return .F.
+    ENDIF
+
+    bBloco := {|| cBuffer := CRLF +;
+        padr(alias(),10) + " - " +;
+        padr(A1_COD,10) + " - " +;
+        padr(A1_LOJA,5) + " - " +;
+        padr(Left(A1_NOME,30),30) + " - " +;
+        padr(dtoc(A1_DTNASC),20),;
+        fWrite(nHandle,cBuffer)}
+
+    SA1->(dbEval(bBloco))
+
+    fClose(nHandle)
+
+Return 
