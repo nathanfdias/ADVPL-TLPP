@@ -45,8 +45,7 @@ Function U_CRIAR_ARQUIVO_TEXTO_1
     ENDIF
 
     cBuffer := CRLF + strtran(space(70), ' ', '-')
-
-        nBuffer := len(cBuffer)
+    nBuffer := len(cBuffer)
 
     nWrite := fWrite(nHandle, cBuffer)
 
@@ -65,6 +64,19 @@ Function U_CRIAR_ARQUIVO_TEXTO_1
         fWrite(nHandle,cBuffer)}
 
     SA1->(dbEval(bBloco))
+
+    cBuffer := CRLF + strtran(space(70), ' ', '-')
+    fWrite(nHandle, cBuffer)
+
+       bBloco := {|| cBuffer := CRLF +;
+        padr(alias(),10) + " - " +;
+        padr(A2_COD,10) + " - " +;
+        padr(A2_LOJA,5) + " - " +;
+        padr(Left(A2_NOME,30),30) + " - " +;
+        padr(dtoc(A2_DTNASC),20),;
+        fWrite(nHandle,cBuffer)}
+
+    SA2->(dbEval(bBloco))
 
     fClose(nHandle)
 

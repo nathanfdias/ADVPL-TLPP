@@ -1,0 +1,57 @@
+#include 'totvs.ch'
+
+Function U_CRIAR_ARQUIVO_TEXTO_2
+
+    Local cSaveFile     as character
+    Local cBuffer       as character
+    Local oArqTxt        as object
+    Local lExistFile    as logical
+    Local lArqTxt       as logical
+    Local lWrite        as logical
+
+    cSaveFile           := 'C:\Temp\ArquivoTexto2.txt'
+    lExistFile          := File(cSaveFile)
+    oArqTxt             := fwFileWriter():new(cSaveFile,.F.)
+    
+    if lExistFile
+        lArqTxt          := oArqTxt:open(2,)
+
+        IF lArqTxt
+            oArqTxt:clear()
+        else
+            fwAlertError('Erro ao abrir o arquivo. Código de erro: ' + Str(fError(),4),'ERRO')
+            return .F.
+        Endif
+    else
+        lArqTxt          := oArqTxt:create()
+        IF .not. lArqTxt
+            fwAlertError('Erro ao criar o arquivo. Código de erro: ' + Str(fError(),4),'ERRO')
+            return .F.
+        Endif
+    endif
+
+    cBuffer := padr("ENTIDADE",10) + " - " + padr("CODIGO",10) + " - " + padr("LOJA",5) +;
+        padr("NOME",5) + " - " + padr("DT_NASCIMENTO",20)
+    lWrite := oArqTxt:write(cBuffer)
+
+    if .not. lWrite
+        fwAlertError('Erro na gravação do arquivo. Código de erro: ' + Str(fError(),4),'ERRO')
+        return .F.
+    endif
+
+    cBuffer := CRLF + strtran(space(70), ' ', '-')
+    OArqTxt:write(cBuffer)
+
+    bBloco := {|| cBuffer := CRLF +;
+        padr(alias(),10) + " - " +;
+        padr(A2_COD,10) + " - " +;
+        padr(A2_LOJA,5) + " - " +;
+        padr(Left(A2_NOME,30),30) + " - " +;
+        padr(dtoc(A2_DTNASC),20),;
+        oArqTxt:write(cBuffer)}
+
+    SA2->(dbEval(bBloco))
+
+    oArqTxt:close()
+
+Return
