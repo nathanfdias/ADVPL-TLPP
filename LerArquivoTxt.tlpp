@@ -1,0 +1,38 @@
+#include 'totvs.ch'
+
+Function U_LER_ARQUIVO_TEXTO_1
+
+    Local cArquivo      as character
+    Local cBuffer       as character
+    Local cTexto        as character
+    Local nHandle       as numeric
+    Local nTamFile      as numeric
+    Local nTamLidos     as numeric
+    Local aLinhas       as array
+    Local aDados        as array
+
+    cArquivo := 'C:\Temp\ArquivoTexto2.txt'
+    nHandle := FOpen(cArquivo)
+
+    If nHandle < 0
+        fwAlertError('Erro ao abrir o arquivo. Código de erro: ' + Str(fError(),4),'ERRO')
+        return .F.
+    Endif
+
+    nTamFile := FSeek(nHandle,0,2)
+    fSeek(nHandle,0)
+
+    while nTamLidos < nTamFile
+        cBuffer := ''
+        nTamLidos += FRead(nHandle,@cBuffer,100)
+        cTexto += cBuffer
+    end
+
+    fClose(nHandle)
+
+    aDados := array(0)
+    aLinhas := strToKArr(cTexto,CHR(13)+CHR(10))
+    aEval(aLinhas,{|x| aadd(aDados,strToKArr(x,';'))})
+
+
+Return

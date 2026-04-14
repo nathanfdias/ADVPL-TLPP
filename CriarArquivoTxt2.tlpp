@@ -4,7 +4,7 @@ Function U_CRIAR_ARQUIVO_TEXTO_2
 
     Local cSaveFile     as character
     Local cBuffer       as character
-    Local oArqTxt        as object
+    Local oArqTxt       as object
     Local lExistFile    as logical
     Local lArqTxt       as logical
     Local lWrite        as logical
