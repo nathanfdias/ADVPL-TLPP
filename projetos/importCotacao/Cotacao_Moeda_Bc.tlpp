@@ -1,0 +1,109 @@
+#include 'totvs.ch'
+
+/*/{Protheus.doc} U_COTACOES_MOEDAS_BC
+    (long_description)
+    @type  Function
+    @author Nathan
+    @since 20/04/2026
+    @version version 1.0
+
+    M2_MOEDA2 := DOLAR_COMPRA
+    M2_MOEDA3 := DOLAR_VENDA
+    M2_MOEDA4 := EURO_COMPRA
+    M2_MOEDA5 := EURO_VENDA
+    /*/
+Function U_COTACOES_MOEDAS_BC
+    
+    Local lRPC          := .F.
+    Local lInclui       := .F.
+    Local cBaseURL      := 'https://www4.bcb.gov.br/Download/fechamento'
+    Local dData         := stod('20200101')
+    Local cData         := ''
+    Local cArqMoedas    := '\system\m2_data.txt' //arquivo datas
+    Local cTxtCotacoes  := ''
+    Local nM2_Moeda2    := '0'
+    Local nM2_Moeda3    := '0'
+    Local nM2_Moeda4    := '0'
+    Local nM2_Moeda5    := '0'
+    Local aLinhas       :=  array(0)
+    Local aContacoes    := array(0)
+    Local x
+
+    IF type('cEmpAnt') != 'C'
+        lRPC            := .T.
+        rpcSetEnv('01','01')
+    ENDIF
+
+    //Verificar se o arquivo de data existe
+    IF .not. file(cArqMoedas)
+        memowrite(cArqMoedas,'20200101') //cria arquivo
+    ENDIF
+
+    dData               := stod(memoread(cArqMoedas))//Obter conteúdo do arquivo
+
+    //Se para a data atual já foi feita alguma importação
+    IF dData > date()
+        IF lRPC //Liberar ambiente
+            rpcClearEnv()
+        ENDIF
+        return // saindo do programa, pois ja existe importacao
+    ENDIF
+
+    //OBS: Taxa da moeda utilizada sempre 1 dia anterior.
+    WHILE .T.
+        //Gerar a data no formato necessário para a URL
+        dData               := stod(memoread(cArqMoedas))
+        cData               := dtos(datavalida(dData - 1,.F.))
+        cTxtCotacoes        := httpGet(cBaseURL + cData + '.csv')  
+        aCotacoes           := array(0)    
+
+        //Verificar se a resposta da requisição é válida
+        aLinhas             := strToKArr(cTxtCotacoes,CHR(13)+CHR(10))//Dividir o conteúdo em linhas
+        
+        //Percorrer as linhas do arquivo CSV e extrair as cotações de USD e EUR
+        FOR x := 1 TO len(aLinhas)
+            // Verificar se a linha contém as cotações de USD ou EUR
+            IF "USD" $ aLinhas[x] .or. "EUR" $ aLinhas[x]
+                add(aContacoes, strToKArr(aLinhas[x],";"))
+            ENDIF
+        NEXT
+
+        IF Len(aCotacoes) = 0
+            memowrite(cArqMoedas,dtos(dData + 1)) //Avançar a data para tentar novamente
+            LOOP //Continuar tentando até obter as cotações, avançando a data a cada tentativa
+        ENDIF
+
+        dbSelectArea("SM2")
+        dbSetOrder(1)
+        lInclui                 := .not.dbSeek(dData)//Verificar se a data já existe na tabela. Retorna .T. porém ".not."
+        
+        nM2_MOEDA2              := val(strtran(aCotacoes[1,5],",",".")) //DOLAR_COMPRA
+        nM2_MOEDA3              := val(strtran(aCotacoes[1,6],",",".")) //DOLAR_VENDA
+        nM2_MOEDA4              := val(strtran(aCotacoes[2,5],",",".")) //EURO_COMPRA
+        nM2_MOEDA5              := val(strtran(aCotacoes[2,6],",",".")) //EURO_VENDA
+
+        reclock(alias(),lInclui)
+            M2_DATA             := dData
+            M2_INFORM           := "S"
+            M2_MOEDA1           := 1 //MOEDA BASE (REAL)
+            M2_MOEDA2           := nM2_MOEDA2 //DOLAR_COMPRA
+            M2_MOEDA3           := nM2_MOEDA3 //DOLAR_VENDA
+            M2_MOEDA4           := nM2_MOEDA4 //EURO_COMPRA
+            M2_MOEDA5           := nM2_MOEDA5 //EURO_VENDA
+
+
+        msunlock()//Liberar o bloqueio para evitar deadlock
+
+        //Atribuir as cotações às variáveis correspondentes
+        memowrite(cArqMoedas,dtos(dData + 1))
+        
+        IF dData >= date()
+            Exit
+        ENDIF
+    ENDDO
+
+    IF lRPC 
+        rpcClearEnv()
+    ENDIF
+    
+Return 

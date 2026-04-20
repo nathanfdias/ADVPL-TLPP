@@ -28,4 +28,6 @@ Function U_LER_ARQUIVO_TEXTO_2
     aLinhas := strToKArr(cTexto,CHR(13)+CHR(10))
     aEval(aLinhas,{|x| aadd(aDados,strToKArr(x,';'))})
 
+    aSort(aDados,2,,{|x,y| x[2] + x[1] < y[2] + y[1]})
+
 Return 
