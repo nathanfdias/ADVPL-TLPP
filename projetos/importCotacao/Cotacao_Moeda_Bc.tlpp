@@ -60,6 +60,10 @@ Function U_COTACOES_MOEDAS_BC
         //Verificar se a resposta da requisição é válida
         aLinhas             := strToKArr(cTxtCotacoes,CHR(13)+CHR(10))//Dividir o conteúdo em linhas
         
+        // Indicar de qual data as cotacoes estao sendo baixadas
+        // PE SIGAFAT funcao processa
+        incproc('Dia: ' + dtoc(dData))
+
         //Percorrer as linhas do arquivo CSV e extrair as cotações de USD e EUR
         FOR x := 1 TO len(aLinhas)
             // Verificar se a linha contém as cotações de USD ou EUR
