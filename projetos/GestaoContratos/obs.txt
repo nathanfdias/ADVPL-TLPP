@@ -1,0 +1,13 @@
+-> Salvar em Menu o U_TOOLS001 :
+    - Para que crie as tabelas via fonte
+
+-> Foram criados 4 tabelas:
+    - Z50 Tipos de contratos:
+    Ajustar criando campo de tipo
+    Criar Indice Filial + Tipo + Codigo
+    - Z51 
+    - Z52
+    - Z53
+
+
+
